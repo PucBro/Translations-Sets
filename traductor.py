@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from googletrans import Translator
+from googletrans import Translator,constants
 
 # Título de la aplicación
 st.title('Traducción de Archivo XLSX')
@@ -31,8 +31,21 @@ if uploaded_file is not None:
     # Inicializar el traductor
     translator = Translator()
 
+    # ...
+
     # Traducir la columna 'English (UK) [Primary]' al español
-    df['Spanish'] = df['English (UK) [Primary]'].apply(lambda x: translator.translate(x, src='en', dest='es').text if pd.notnull(x) else x)
+    def translate_text(text):
+        if pd.notnull(text):
+            # Utilizar try-except para manejar posibles errores
+            try:
+                return translator.translate(text, src='en', dest='es').text
+            except Exception as e:
+                print(f"Error al traducir el texto: {text}. Error: {str(e)}")
+                return text
+        else:
+            return text
+
+    df.loc[df['Spanish'].isnull(), 'Spanish'] = df.loc[df['Spanish'].isnull(), 'English (UK) [Primary]'].apply(translate_text)
 
     # Llenar la columna 'Description' para valores nulos con el texto proporcionado por el usuario
     df['Description'] = df['Description'].fillna(description_text)
