@@ -26,7 +26,7 @@ if uploaded_file is not None:
         st.dataframe(duplicates)
         
         # Eliminar filas duplicadas, manteniendo la primera ocurrencia
-        df = df.drop_duplicates(subset=['English (UK) [Primary]'], keep='first')
+        df = df.drop_duplicates(subset=['English (UK) [Primary]'], keep='last')
     
     # Inicializar el traductor
     translator = Translator()
