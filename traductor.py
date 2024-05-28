@@ -9,9 +9,9 @@ st.title('Traducción de Archivo XLSX')
 uploaded_file = st.file_uploader("Sube tu archivo XLSX", type=["xlsx"])
 
 # Entrada de texto para la descripción por defecto
-description_text = st.text_input("Ingrese la descripción para valores nulos", "Descripción por defecto")
+description_text = st.text_input("Ingrese la descripción para los valores nulos", placeholder="Descripción por defecto")
 
-if uploaded_file is not None:
+if uploaded_file is not None and description_text != "":
     # Leer el archivo XLSX
     df = pd.read_excel(uploaded_file)
     
@@ -65,3 +65,5 @@ if uploaded_file is not None:
         file_name=output_file_path,
         mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     )
+elif uploaded_file is not None and description_text == "":
+    st.warning("Por favor, ingrese una descripción para los valores nulos.")
