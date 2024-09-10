@@ -18,22 +18,22 @@ if uploaded_file is not None and description_text != "":
     st.write("Archivo cargado exitosamente:")
     st.dataframe(df.head())
     
-    # Identificar entradas repetidas en la columna 'English (UK) [Primary]'
-    duplicates = df[df.duplicated(subset=['English (UK) [Primary]'], keep=False)]
+    # Identificar entradas repetidas en la columna 'English (US) [Primary]'
+    duplicates = df[df.duplicated(subset=['English (US) [Primary]'], keep=False)]
     
     if not duplicates.empty:
         st.write("Entradas repetidas encontradas:")
         st.dataframe(duplicates)
         
         # Eliminar filas duplicadas, manteniendo la primera ocurrencia
-        df = df.drop_duplicates(subset=['English (UK) [Primary]'], keep='last')
+        df = df.drop_duplicates(subset=['English (US) [Primary]'], keep='last')
     
     # Inicializar el traductor
     translator = Translator()
 
     # ...
 
-    # Traducir la columna 'English (UK) [Primary]' al español
+    # Traducir la columna 'English (US) [Primary]' al español
     def translate_text(text):
         if pd.notnull(text):
             # Utilizar try-except para manejar posibles errores
@@ -45,7 +45,7 @@ if uploaded_file is not None and description_text != "":
         else:
             return text
 
-    df.loc[df['Spanish'].isnull(), 'Spanish'] = df.loc[df['Spanish'].isnull(), 'English (UK) [Primary]'].apply(translate_text)
+    df.loc[df['Spanish'].isnull(), 'Spanish'] = df.loc[df['Spanish'].isnull(), 'English (US) [Primary]'].apply(translate_text)
 
     # Llenar la columna 'Description' para valores nulos con el texto proporcionado por el usuario
     df['Description'] = df['Description'].fillna(description_text)
